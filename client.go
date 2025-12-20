@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	v2 "github.com/zomvs/mobula-go-sdk/v2"
 )
 
 const (
@@ -74,6 +76,7 @@ func (c *Client) doRequest(ctx context.Context, method, path string, queryParams
 		return nil, fmt.Errorf("invalid base URL: %w", err)
 	}
 	u.Path = path
+
 	if queryParams != nil {
 		u.RawQuery = queryParams.Encode()
 	}
@@ -147,4 +150,54 @@ func (c *Client) post(ctx context.Context, path string, body interface{}, result
 	}
 
 	return nil
+}
+
+// Get performs a GET request (public wrapper for v2 package)
+func (c *Client) Get(ctx context.Context, path string, queryParams url.Values, result interface{}) error {
+	return c.get(ctx, path, queryParams, result)
+}
+
+// ========================
+// Token Security API
+// ========================
+
+// GetTokenSecurity retrieves security information for a token
+func (c *Client) GetTokenSecurity(ctx context.Context, req *v2.TokenSecurityRequest) (*v2.TokenSecurityResponse, error) {
+	return v2.GetTokenSecurity(ctx, c, req)
+}
+
+// ========================
+// Token Details API
+// ========================
+
+// GetTokenDetails retrieves detailed information for a token
+func (c *Client) GetTokenDetails(ctx context.Context, req *v2.TokenDetailsRequest) (*v2.TokenDetailsResponse, error) {
+	return v2.GetTokenDetails(ctx, c, req)
+}
+
+// ========================
+// Asset Details API
+// ========================
+
+// GetAssetDetails retrieves detailed metadata for an asset
+func (c *Client) GetAssetDetails(ctx context.Context, req *v2.AssetDetailsRequest) (*v2.AssetDetailsResponse, error) {
+	return v2.GetAssetDetails(ctx, c, req)
+}
+
+// ========================
+// Market Details API
+// ========================
+
+// GetMarketDetails retrieves market details for an asset
+func (c *Client) GetMarketDetails(ctx context.Context, req *v2.MarketDetailsRequest) (*v2.MarketDetailsResponse, error) {
+	return v2.GetMarketDetails(ctx, c, req)
+}
+
+// ========================
+// Token Markets API
+// ========================
+
+// GetTokenMarkets retrieves market data for a token
+func (c *Client) GetTokenMarkets(ctx context.Context, req *v2.TokenMarketsRequest) (*v2.TokenMarketsResponse, error) {
+	return v2.GetTokenMarkets(ctx, c, req)
 }
